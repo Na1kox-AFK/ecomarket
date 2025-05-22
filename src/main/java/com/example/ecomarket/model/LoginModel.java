@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 /*Creacion de atributos para el Login, y no se generan las constructores tanto con parametros como sin parametros gracias a lombok*/
-public class Login {
+public class LoginModel {
     private String rut;
     private String nombreP;
     private String nombreM;

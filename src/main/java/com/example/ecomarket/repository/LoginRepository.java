@@ -1,7 +1,7 @@
 package com.example.ecomarket.repository;
 
     /*Importacioes a ocupar para extraer desde el model al repository e importacion de spring */
-    import com.example.ecomarket.model.Login;
+    import com.example.ecomarket.model.LoginModel;
     import org.springframework.stereotype.Repository;
     
     /*importacion de herramientas de java como List(para listar) y ArrayList(para recorrer la lista) */
@@ -13,20 +13,20 @@ package com.example.ecomarket.repository;
     public class LoginRepository {
     
         /*Creacion de ArrayList para recorrer los login*/
-        private List<Login> listaLogin = new ArrayList <>();
+        private List<LoginModel> listaLogin = new ArrayList <>();
     
         /*Metodo para retornar los Login */
-        public LoginRepository (List<Login> listarLogins) {
+        public LoginRepository (List<LoginModel> listarLogins) {
             this.listaLogin = listarLogins;
         }
     
-        public List<Login> obtenerLogin(){
+        public List<LoginModel> obtenerLogin(){
             return listaLogin;
         }
     
         /*Buscar Login por rut*/
-        public Login buscarPorRut (String rut) {
-            for (Login login: listaLogin){
+        public LoginModel buscarPorRut (String rut) {
+            for (LoginModel login: listaLogin){
                 if(login.getRut() == rut){
                     return login;
                 }
@@ -35,14 +35,14 @@ package com.example.ecomarket.repository;
         }
     
         /*Guardar Login enviandolo a la lista y retornandolo */
-        public Login guardar(Login lib){
+        public LoginModel guardar(LoginModel lib){
             listaLogin.add(lib);
             return lib;
         }
     
         /*Creacion de metodo para eliminar un login*/
         public void Eliminar (String rut){
-            Login login = buscarPorRut(rut);
+            LoginModel login = buscarPorRut(rut);
             if(login !=null){
                 listaLogin.remove(login);
             }
@@ -64,7 +64,7 @@ package com.example.ecomarket.repository;
         }
     
         /*Metodo para actualizar el login*/
-        public Login actualizar(Login log) {
+        public LoginModel actualizar(LoginModel log) {
             int rutPosicion = 0;
         
             for (int i = 0; i < listaLogin.size(); i++) {
@@ -78,7 +78,7 @@ package com.example.ecomarket.repository;
                 return null;
             }
         
-            Login login1 = new Login();
+            LoginModel login1 = new LoginModel();
             login1.setRut(log.getRut());
             login1.setNombreP(log.getNombreP());
             login1.setNombreM(log.getNombreM());
