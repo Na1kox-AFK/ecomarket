@@ -1,45 +1,60 @@
 package com.example.ecomarket.services;
 
-import com.example.ecomarket.repository.LoginRepository;
 import com.example.ecomarket.model.LoginModel;
+import com.example.ecomarket.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
-
 public class loginServices {
-    @Autowired
-    private LoginRepository loginRepository;
 
-    /*listar libros */
-    public List<LoginModel> getLogins(){
-        return loginRepository.obtenerLogin();
+    private final LoginRepository loginRepository;
+
+    @Autowired 
+    public loginServices(LoginRepository loginRepository) {
+        this.loginRepository = loginRepository;
     }
 
-    /*Guardar Login */
-    public LoginModel saveLogin(LoginModel loginModel){
-        return loginRepository.guardar(loginModel);
+    public List<LoginModel> obtenerTodosLosLogins() {
+        return loginRepository.findAll(); 
     }
 
-    /*Retornar Login */
-    public LoginModel updateLogin(LoginModel loginModel){
-        return loginRepository.actualizar(loginModel);
+    public Optional<LoginModel> buscarLoginPorRut(String rut) {
+        return loginRepository.findByRut(rut);
     }
 
-    /*retornar Login */
-    public LoginModel getrutModel(String rut){
-        return loginRepository.buscarPorRut(rut);
+    public LoginModel guardarLogin(LoginModel login) {
+        return loginRepository.save(login);
     }
 
-    /*Eliminar Login */
-    public String deleteLogin(String rut){
-        loginRepository.Eliminar(rut);
-        return "Login eliminado";
+    public LoginModel actualizarLogin(LoginModel login) {
+        Optional<LoginModel> existingLoginOptional = loginRepository.findByRut(login.getRut());
+
+        if (existingLoginOptional.isPresent()) {
+            LoginModel existingLogin = existingLoginOptional.get();
+            existingLogin.setNombreP(login.getNombreP());
+            existingLogin.setNombreM(login.getNombreM());
+            existingLogin.setApellidoP(login.getApellidoP());
+            existingLogin.setApellidoM(login.getApellidoM());
+            existingLogin.setCelurlar(login.getCelurlar());
+            existingLogin.setCodigoPostal(login.getCodigoPostal());
+            existingLogin.setCorreoElectronico(login.getCorreoElectronico());
+            existingLogin.setDireccion(login.getDireccion());
+
+            return loginRepository.save(existingLogin); // save() también actualiza si el ID existe
+        } else {
+            return null;
+        }
     }
 
-    public int totalLoginsV1(){
-        return loginRepository.obtenerLogin().size();
+    public boolean eliminarLogin(String rut) {
+        if (loginRepository.existsById(rut)) {
+            loginRepository.deleteById(rut);
+            return true;
+        }
+        return false;
     }
-
 }
