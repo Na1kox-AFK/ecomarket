@@ -44,7 +44,7 @@ public class loginServices {
             existingLogin.setCorreoElectronico(login.getCorreoElectronico());
             existingLogin.setDireccion(login.getDireccion());
 
-            return loginRepository.save(existingLogin); // save() también actualiza si el ID existe
+            return loginRepository.save(existingLogin);
         } else {
             return null;
         }
