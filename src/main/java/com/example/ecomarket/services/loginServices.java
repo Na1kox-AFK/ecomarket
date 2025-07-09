@@ -2,7 +2,7 @@ package com.example.ecomarket.services;
 
 import com.example.ecomarket.model.LoginModel;
 import com.example.ecomarket.repository.LoginRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class loginServices {
 
     private final LoginRepository loginRepository;
 
-    @Autowired 
+    
     public loginServices(LoginRepository loginRepository) {
         this.loginRepository = loginRepository;
     }
@@ -35,10 +35,8 @@ public class loginServices {
 
         if (existingLoginOptional.isPresent()) {
             LoginModel existingLogin = existingLoginOptional.get();
-            existingLogin.setNombreP(login.getNombreP());
-            existingLogin.setNombreM(login.getNombreM());
-            existingLogin.setApellidoP(login.getApellidoP());
-            existingLogin.setApellidoM(login.getApellidoM());
+            existingLogin.setNombre(login.getNombre());
+            existingLogin.setApellido(login.getApellido());
             existingLogin.setCelurlar(login.getCelurlar());
             existingLogin.setCodigoPostal(login.getCodigoPostal());
             existingLogin.setCorreoElectronico(login.getCorreoElectronico());

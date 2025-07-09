@@ -2,7 +2,7 @@ package com.example.ecomarket.controller;
 
 import com.example.ecomarket.model.LoginModel;
 import com.example.ecomarket.services.loginServices;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ public class LoginController {
     private final loginServices loginServices;
 
 
-    @Autowired // Inyección de dependencia del LoginService
+
     public LoginController(loginServices loginServices) {
         this.loginServices = loginServices;
     }

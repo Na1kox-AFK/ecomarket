@@ -1,7 +1,7 @@
 package com.example.ecomarket.services;
 
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import com.example.ecomarket.repository.ReportesRepository; // Importación del repositorio de Reportes
 import com.example.ecomarket.model.ReportesModel; // Importación del modelo de Reporte
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ReportesServices {
     private final ReportesRepository.ReporteRepository reportesRepository;
 
-    @Autowired
+
     public ReportesServices(ReportesRepository.ReporteRepository reportesRepository) {
         this.reportesRepository = reportesRepository;
     }

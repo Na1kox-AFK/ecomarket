@@ -23,11 +23,8 @@ import jakarta.persistence.Table;
 public class LoginModel {
     @Id
     private String rut;
-
-    private String nombreP;
-    private String nombreM;
-    private String apellidoP;
-    private String apellidoM;
+    private String nombre;
+    private String apellido;
     private int celurlar;
     private String direccion;
     private int codigoPostal;
