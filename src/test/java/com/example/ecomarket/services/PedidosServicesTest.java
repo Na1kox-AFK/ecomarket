@@ -35,7 +35,7 @@ class PedidosServicesTest {
     private PedidosModel pedidoRequest;
     private LoginModel clienteExistente;
     private InventarioModel productoDisponible;
-    private InventarioModel productoSinStock;
+
 
     @BeforeEach
     void setUp() {
@@ -43,7 +43,7 @@ class PedidosServicesTest {
 
         clienteExistente = new LoginModel("11111111-1", "Juan", "Perez", 911111111, "Calle 123", 12345, "juan@example.com");
         productoDisponible = new InventarioModel("P001", "Manzanas", 10, 1.50, "Fruta fresca");
-        productoSinStock = new InventarioModel("P002", "Leche", 0, 2.00, "Leche entera");
+
 
         pedidoRequest = new PedidosModel();
         pedidoRequest.setRutCliente("11111111-1");
