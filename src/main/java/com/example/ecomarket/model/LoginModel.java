@@ -1,26 +1,27 @@
 package com.example.ecomarket.model;
 
-/*importacion de lombok */
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-/*Importaciones para la base de datos*/
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-/*ocupando las importaciones de lombok */
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-/*Usando importaciones de Jakarta*/
 @Entity
 @Table(name = "Logins")
+public class LoginModel implements UserDetails {
 
-/*Creacion de atributos para el Login, y no se generan las constructores tanto con parametros como sin parametros gracias a lombok*/
-public class LoginModel {
     @Id
     private String rut;
     private String nombre;
@@ -29,5 +30,41 @@ public class LoginModel {
     private String direccion;
     private int codigoPostal;
     private String correoElectronico;
-    
+    private String contrasena;
+    private String role = "USER";
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.contrasena;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.rut;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

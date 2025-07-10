@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class PedidosServicesTest {
@@ -41,7 +43,7 @@ class PedidosServicesTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        clienteExistente = new LoginModel("11111111-1", "Juan", "Perez", 911111111, "Calle 123", 12345, "juan@example.com");
+        clienteExistente = new LoginModel("11111111-1", "Juan", "Perez", 911111111, "Calle 123", 12345, "juan@example.com", "contrasenaCodificadaDeEjemplo", "USER");
         productoDisponible = new InventarioModel("P001", "Manzanas", 10, 1.50, "Fruta fresca");
 
 
