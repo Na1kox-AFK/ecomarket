@@ -3,6 +3,8 @@ package com.example.ecomarket.controller;
 import com.example.ecomarket.model.InventarioModel;
 import com.example.ecomarket.services.InventarioServices;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +36,8 @@ public class InventarioController {
                        .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping
-    public ResponseEntity<InventarioModel> crearProducto(@RequestBody InventarioModel producto) {
+     @PostMapping
+    public ResponseEntity<InventarioModel> crearProducto(@Valid @RequestBody InventarioModel producto) { // Añadido @Valid
         InventarioModel nuevoProducto = inventarioServices.guardarProducto(producto);
         return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
     }
