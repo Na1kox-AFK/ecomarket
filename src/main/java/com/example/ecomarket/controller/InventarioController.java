@@ -40,7 +40,7 @@ public class InventarioController {
         return new ResponseEntity<>(nuevoProducto, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity<InventarioModel> actualizarProducto(@RequestBody InventarioModel producto) {
         InventarioModel productoActualizado = inventarioServices.actualizarProducto(producto);
         if (productoActualizado != null) {
