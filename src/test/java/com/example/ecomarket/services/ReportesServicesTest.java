@@ -50,7 +50,8 @@ class ReportesServicesTest {
 
     @Test
     void testBuscarReportePorIdExistente() {
-        when(reportesRepository.findById("R001")).thenReturn(Optional.of(reporte1));
+        // Confirmado por el servicio: 'buscarReportePorId' usa 'findByIdReporte'
+        when(reportesRepository.findByIdReporte("R001")).thenReturn(Optional.of(reporte1));
 
         Optional<ReportesModel> foundReporte = reportesServices.buscarReportePorId("R001");
 
@@ -58,18 +59,19 @@ class ReportesServicesTest {
         assertEquals("Juan Perez", foundReporte.get().getNombreUsuario());
         assertEquals("Pendiente", foundReporte.get().getEstadoReporte());
 
-        verify(reportesRepository, times(1)).findById("R001");
+        verify(reportesRepository, times(1)).findByIdReporte("R001");
     }
 
     @Test
     void testBuscarReportePorIdNoExistente() {
-        when(reportesRepository.findById("R999")).thenReturn(Optional.empty());
+        // Confirmado por el servicio: 'buscarReportePorId' usa 'findByIdReporte'
+        when(reportesRepository.findByIdReporte("R999")).thenReturn(Optional.empty());
 
         Optional<ReportesModel> foundReporte = reportesServices.buscarReportePorId("R999");
 
         assertFalse(foundReporte.isPresent());
 
-        verify(reportesRepository, times(1)).findById("R999");
+        verify(reportesRepository, times(1)).findByIdReporte("R999");
     }
 
     @Test
@@ -92,15 +94,25 @@ class ReportesServicesTest {
     void testActualizarReporteExistente() {
         ReportesModel reporteActualizadoData = new ReportesModel("R001", "Juan Perez", "11111111-1", "juan.p@example.com", "No puedo iniciar sesión - Resuelto", "Resuelto");
 
+        // Confirmado por el servicio: 'actualizarReporte' usa 'findById'
         when(reportesRepository.findById("R001")).thenReturn(Optional.of(reporte1));
-        when(reportesRepository.save(any(ReportesModel.class))).thenReturn(reporteActualizadoData);
+
+        // Uso thenAnswer para devolver el objeto que el servicio guarda,
+        // esto es más robusto cuando el servicio modifica el objeto existente.
+        when(reportesRepository.save(any(ReportesModel.class))).thenAnswer(invocation -> {
+            // El argumento 0 es el ReportesModel que el servicio le pasó a save()
+            ReportesModel savedReporte = invocation.getArgument(0);
+            return savedReporte;
+        });
 
         ReportesModel result = reportesServices.actualizarReporte(reporteActualizadoData);
 
-        assertNotNull(result);
+        assertNotNull(result); // Ahora debería pasar si el servicio funciona como se espera
         assertEquals("R001", result.getIdReporte());
         assertEquals("Resuelto", result.getEstadoReporte());
         assertEquals("No puedo iniciar sesión - Resuelto", result.getDescripcionProblema());
+        // También podemos verificar que otros campos se mantengan
+        assertEquals("Juan Perez", result.getNombreUsuario());
 
         verify(reportesRepository, times(1)).findById("R001");
         verify(reportesRepository, times(1)).save(any(ReportesModel.class));
@@ -110,6 +122,7 @@ class ReportesServicesTest {
     void testActualizarReporteNoExistente() {
         ReportesModel nonExistentReporte = new ReportesModel("R999", "Fake User", "99999999-9", "fake@example.com", "Non-existent problem", "Pendiente");
 
+        // Confirmado por el servicio: 'actualizarReporte' usa 'findById'
         when(reportesRepository.findById("R999")).thenReturn(Optional.empty());
 
         ReportesModel result = reportesServices.actualizarReporte(nonExistentReporte);

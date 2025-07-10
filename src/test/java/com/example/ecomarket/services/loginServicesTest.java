@@ -30,15 +30,17 @@ class loginServicesTest {
     private LoginModel user1;
     private LoginModel user2;
     private final String RAW_PASSWORD = "password123";
-    private final String ENCODED_PASSWORD = "$2a$10$abcdefghijklmnopqrstuvwx.abcdefghijklmnopqrstuvwxyz";
+    private final String ENCODED_PASSWORD = "$2a$10$abcdefghijklmnopqrstuvwx.abcdefghijklmnopqrstuvwxyz"; // Hash válido de ejemplo
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
+        // Mock para passwordEncoder, si se usa dentro de los métodos de servicio probados
         when(passwordEncoder.encode(RAW_PASSWORD)).thenReturn(ENCODED_PASSWORD);
         when(passwordEncoder.matches(RAW_PASSWORD, ENCODED_PASSWORD)).thenReturn(true);
 
+        // Instanciación de LoginModel ajustada a la estructura proporcionada
         user1 = new LoginModel("11111111-1", "Juan", "Perez", 987654321, "Calle Falsa 123", 1234567, "juan.p@example.com", ENCODED_PASSWORD, "USER");
         user2 = new LoginModel("22222222-2", "Maria", "Lopez", 912345678, "Avenida Siempre Viva 742", 7654321, "maria.l@example.com", ENCODED_PASSWORD, "ADMIN");
     }
@@ -118,7 +120,8 @@ class loginServicesTest {
     void testActualizarLoginExistenteConNuevaContrasena() {
         LoginModel updatedData = new LoginModel("11111111-1", "Juanito", "Perez", 987654321, "Calle Falsa 123", 1234567, "juan.p@example.com", RAW_PASSWORD, "ADMIN");
 
-        when(loginRepository.findById(updatedData.getRut())).thenReturn(Optional.of(user1));
+        // CAMBIO CLAVE: Usa findByRut, no findById
+        when(loginRepository.findByRut(updatedData.getRut())).thenReturn(Optional.of(user1));
         when(passwordEncoder.encode(RAW_PASSWORD)).thenReturn(ENCODED_PASSWORD);
         LoginModel savedUpdatedUser = new LoginModel(updatedData.getRut(), updatedData.getNombre(), updatedData.getApellido(), updatedData.getCelurlar(), updatedData.getDireccion(), updatedData.getCodigoPostal(), updatedData.getCorreoElectronico(), ENCODED_PASSWORD, updatedData.getRole());
         when(loginRepository.save(any(LoginModel.class))).thenReturn(savedUpdatedUser);
@@ -130,16 +133,21 @@ class loginServicesTest {
         assertEquals("ADMIN", result.getRole());
         assertEquals(ENCODED_PASSWORD, result.getContrasena());
 
-        verify(loginRepository, times(1)).findById(updatedData.getRut());
+        // CAMBIO CLAVE: Verifica findByRut, no findById
+        verify(loginRepository, times(1)).findByRut(updatedData.getRut());
         verify(passwordEncoder, times(1)).encode(RAW_PASSWORD);
         verify(loginRepository, times(1)).save(any(LoginModel.class));
     }
 
     @Test
     void testActualizarLoginExistenteSinCambiarContrasena() {
+        // Asegúrate de que la contraseña en updatedData sea nula para simular "sin cambiar contraseña"
         LoginModel updatedData = new LoginModel("11111111-1", "Juanito", "Perez", 987654321, "Calle Falsa 123", 1234567, "juan.p@example.com", null, "USER");
 
-        when(loginRepository.findById(updatedData.getRut())).thenReturn(Optional.of(user1));
+        // CAMBIO CLAVE: Usa findByRut, no findById
+        when(loginRepository.findByRut(updatedData.getRut())).thenReturn(Optional.of(user1));
+        
+        // Simula lo que save devolvería, manteniendo la contraseña original
         LoginModel savedUpdatedUser = new LoginModel(updatedData.getRut(), updatedData.getNombre(), updatedData.getApellido(), updatedData.getCelurlar(), updatedData.getDireccion(), updatedData.getCodigoPostal(), updatedData.getCorreoElectronico(), user1.getContrasena(), updatedData.getRole());
         when(loginRepository.save(any(LoginModel.class))).thenReturn(savedUpdatedUser);
 
@@ -147,11 +155,12 @@ class loginServicesTest {
 
         assertNotNull(result);
         assertEquals("Juanito", result.getNombre());
-        assertEquals(user1.getContrasena(), result.getContrasena());
+        assertEquals(user1.getContrasena(), result.getContrasena()); // La contraseña debe ser la original
         assertEquals("USER", result.getRole());
 
-        verify(loginRepository, times(1)).findById(updatedData.getRut());
-        verify(passwordEncoder, never()).encode(anyString());
+        // CAMBIO CLAVE: Verifica findByRut, no findById
+        verify(loginRepository, times(1)).findByRut(updatedData.getRut());
+        verify(passwordEncoder, never()).encode(anyString()); // No se debe llamar a encode si la contraseña no cambia
         verify(loginRepository, times(1)).save(any(LoginModel.class));
     }
 
@@ -159,18 +168,21 @@ class loginServicesTest {
     void testActualizarLoginNoExistente() {
         LoginModel nonExistentUser = new LoginModel("99999999-9", "Fake", "User", 123456789, "Nowhere", 0, "fake@example.com", RAW_PASSWORD, "USER");
 
-        when(loginRepository.findById(nonExistentUser.getRut())).thenReturn(Optional.empty());
+        // CAMBIO CLAVE: Usa findByRut, no findById
+        when(loginRepository.findByRut(nonExistentUser.getRut())).thenReturn(Optional.empty());
 
         LoginModel result = loginServices.actualizarLogin(nonExistentUser);
 
         assertNull(result);
-        verify(loginRepository, times(1)).findById(nonExistentUser.getRut());
+        // CAMBIO CLAVE: Verifica findByRut, no findById
+        verify(loginRepository, times(1)).findByRut(nonExistentUser.getRut());
         verify(passwordEncoder, never()).encode(anyString());
         verify(loginRepository, never()).save(any(LoginModel.class));
     }
 
     @Test
     void testEliminarLoginExistente() {
+        // Asumiendo que eliminarLogin usa existsById y deleteById
         when(loginRepository.existsById("11111111-1")).thenReturn(true);
         doNothing().when(loginRepository).deleteById("11111111-1");
 
@@ -183,6 +195,7 @@ class loginServicesTest {
 
     @Test
     void testEliminarLoginNoExistente() {
+        // Asumiendo que eliminarLogin usa existsById
         when(loginRepository.existsById("99999999-9")).thenReturn(false);
 
         boolean deleted = loginServices.eliminarLogin("99999999-9");
