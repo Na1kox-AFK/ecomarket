@@ -9,11 +9,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class ReportesRepository {
 /* Hacemos una extensión para que obtenga todos los métodos del CRUD */
-    public interface ReporteRepository extends JpaRepository<ReportesModel, String> {
+    public interface ReportesRepository extends JpaRepository<ReportesModel, String> {
 
         /* Con esta función podemos hacer que la importación Optional busque detalladamente el atributo idReporte */
         Optional<ReportesModel> findByIdReporte(String idReporte);
     }
-}
+

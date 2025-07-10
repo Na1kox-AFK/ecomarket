@@ -2,42 +2,54 @@ package com.example.ecomarket.services;
 
 import org.springframework.stereotype.Service;
 
-import com.example.ecomarket.repository.ReportesRepository; // Importación del repositorio de Reportes
-import com.example.ecomarket.model.ReportesModel; // Importación del modelo de Reporte
+import com.example.ecomarket.repository.ReportesRepository;
+import com.example.ecomarket.model.ReportesModel; 
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ReportesServices {
-    private final ReportesRepository.ReporteRepository reportesRepository;
+ 
+    private final ReportesRepository reportesRepository;
 
 
-    public ReportesServices(ReportesRepository.ReporteRepository reportesRepository) {
+    public ReportesServices(ReportesRepository reportesRepository) {
         this.reportesRepository = reportesRepository;
     }
 
-    // Método para obtener todos los reportes
+
     public List<ReportesModel> obtenerTodosLosReportes() {
         return reportesRepository.findAll();
     }
 
-    // Método para buscar un reporte por su ID
+ 
     public Optional<ReportesModel> buscarReportePorId(String idReporte) {
+
         return reportesRepository.findByIdReporte(idReporte);
+
     }
 
-    // Método para guardar un nuevo reporte
+
     public ReportesModel guardarReporte(ReportesModel reporte) {
         return reportesRepository.save(reporte);
     }
 
-    // Método para actualizar un reporte existente
+
     public ReportesModel actualizarReporte(ReportesModel reporte) {
-        return reportesRepository.save(reporte);
+         Optional<ReportesModel> existingReporteOptional = reportesRepository.findById(reporte.getIdReporte());
+         if (existingReporteOptional.isPresent()) {
+             ReportesModel existingReporte = existingReporteOptional.get();
+             existingReporte.setDescripcionProblema(reporte.getDescripcionProblema());
+             existingReporte.setEstadoReporte(reporte.getEstadoReporte());
+
+             return reportesRepository.save(existingReporte);
+         } else {
+             return null;
+         }
     }
 
-    // Método para eliminar un reporte por su ID
+
     public boolean eliminarReporte(String idReporte) {
         if (reportesRepository.existsById(idReporte)) {
             reportesRepository.deleteById(idReporte);
@@ -45,5 +57,4 @@ public class ReportesServices {
         }
         return false;
     }
-
 }
