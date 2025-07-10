@@ -3,7 +3,7 @@ package com.example.ecomarket.services;
 import com.example.ecomarket.model.LoginModel;
 import com.example.ecomarket.repository.LoginRepository;
 
-import org.springframework.security.crypto.password.PasswordEncoder; // ¡NUEVA IMPORTACIÓN!
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +13,12 @@ import java.util.Optional;
 public class loginServices {
 
     private final LoginRepository loginRepository;
-    private final PasswordEncoder passwordEncoder; // ¡NUEVO CAMPO!
+    private final PasswordEncoder passwordEncoder; 
 
-    // Constructor con la inyección de PasswordEncoder
+
     public loginServices(LoginRepository loginRepository, PasswordEncoder passwordEncoder) {
         this.loginRepository = loginRepository;
-        this.passwordEncoder = passwordEncoder; // ¡ASIGNAR!
+        this.passwordEncoder = passwordEncoder; 
     }
 
     public List<LoginModel> obtenerTodosLosLogins() {
@@ -29,7 +29,7 @@ public class loginServices {
         return loginRepository.findByRut(rut);
     }
 
-    // Método para guardar un NUEVO usuario (con codificación de contraseña)
+ 
     public LoginModel registrarNuevoUsuario(LoginModel login) {
         if (loginRepository.findByRut(login.getRut()).isPresent()) {
             throw new IllegalArgumentException("El RUT ya está registrado.");
@@ -43,14 +43,9 @@ public class loginServices {
         return loginRepository.save(login);
     }
 
-    // Tu método guardarLogin original, que ahora podría usarse para un propósito diferente,
-    // o eliminarse si registrarNuevoUsuario es el método principal para crear.
-    // Si mantienes este, debes asegurarte de que la contraseña esté codificada antes de que llegue aquí,
-    // o codificarla aquí también.
+
     public LoginModel guardarLogin(LoginModel login) {
-        // En un contexto de Spring Security, deberías codificar la contraseña aquí también
-        // si este método es para crear usuarios.
-        // login.setContrasena(passwordEncoder.encode(login.getContrasena()));
+
         return loginRepository.save(login);
     }
 
@@ -61,7 +56,7 @@ public class loginServices {
         if (existingLoginOptional.isPresent()) {
             LoginModel existingLogin = existingLoginOptional.get();
 
-            // Actualiza los campos existentes
+
             existingLogin.setNombre(login.getNombre());
             existingLogin.setApellido(login.getApellido());
             existingLogin.setCelurlar(login.getCelurlar());
@@ -69,12 +64,12 @@ public class loginServices {
             existingLogin.setCorreoElectronico(login.getCorreoElectronico());
             existingLogin.setDireccion(login.getDireccion());
 
-            // ¡NUEVO: Lógica para actualizar la contraseña si se proporciona una nueva!
+
             if (login.getContrasena() != null && !login.getContrasena().isEmpty()) {
                 existingLogin.setContrasena(passwordEncoder.encode(login.getContrasena()));
             }
 
-            // ¡NUEVO: Actualizar el rol!
+
             if (login.getRole() != null && !login.getRole().isEmpty()) {
                  existingLogin.setRole(login.getRole());
             }
