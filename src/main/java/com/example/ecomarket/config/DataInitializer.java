@@ -26,28 +26,27 @@ public class DataInitializer {
     public CommandLineRunner initData() {
         return args -> {
             // Verifica si el usuario de prueba ya existe para no crearlo múltiples veces
-            if (loginRepository.findByRut("11111111-1").isEmpty()) {
+            if (loginRepository.findByRut("21951945-1").isEmpty()) {
                 System.out.println("Creando usuario de prueba...");
 
                 // Crea el modelo de usuario de login
                 LoginModel testUser = new LoginModel(
-                    "11111111-1",            // rut
-                    "Juan",                  // nombre
-                    "Perez",                 // apellido
-                    987654321,               // celular
-                    "Calle Falsa 123",       // direccion
+                    "21951945-1",            // rut
+                    "Matias",                  // nombre
+                    "Diaz",                 // apellido
+                    973831037,               // celular
+                    "los naranjos 123",       // direccion
                     12345,                   // codigoPostal
                     "juan.perez@example.com", // correoElectronico
-                    passwordEncoder.encode("password123"), // <--- IMPORTANTE: Codificar la contraseña
-                    "ADMIN"                  // role (puedes cambiarlo a "USER" si lo prefieres)
+                    passwordEncoder.encode("Elturron_16"), // <--- IMPORTANTE: Codificar la contraseña
+                    "ADMIN"                  
                 );
 
-                // Guarda el usuario en la base de datos
                 loginRepository.save(testUser);
-                System.out.println("Usuario 'Juan Perez' con RUT '11111111-1' y rol 'ADMIN' creado exitosamente.");
-                System.out.println("Contraseña (texto plano) para login: password123");
+                System.out.println("Usuario 'Matias' con RUT '21951945-1' y rol 'ADMIN' creado exitosamente.");
+                System.out.println("Contraseña (texto plano) para login: Elturron_16");
             } else {
-                System.out.println("Usuario de prueba '11111111-1' ya existe.");
+                System.out.println("Usuario de prueba '21951945-1' ya existe.");
             }
         };
     }
