@@ -11,7 +11,11 @@ import jakarta.validation.constraints.Min;       // Añade esta importación
 import jakarta.validation.constraints.NotBlank;   // Añade esta importación
 
 
-@Data @AllArgsConstructor @NoArgsConstructor @Entity @Table(name = "Inventario")
+@Data 
+@AllArgsConstructor 
+@NoArgsConstructor 
+@Entity 
+@Table(name = "Inventario")
 public class InventarioModel {
     @Id
     @NotBlank(message = "El ID del inventario no puede estar vacío.") // Añadido
