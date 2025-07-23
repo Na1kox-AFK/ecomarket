@@ -36,10 +36,10 @@ Para poner en marcha este proyecto en tu entorno local, sigue estos pasos:
     cd EcoMarket
     ```
 3.  **Configura PostgreSQL:**
-    * Este proyecto espera una configuración de PostgreSQL. Puedes encontrar las instrucciones detalladas para la configuración de la base de datos en este repositorio de mi perfil: [link a tu repositorio de configuración de PostgreSQL, ej: `https://github.com/Na1kox-AFK/PostgreSQL-Setup-Guide`](https://github.com/Na1kox-AFK/PostgreSQL-Setup-Guide) (Asegúrate de reemplazar `https://github.com/Na1kox-AFK/PostgreSQL-Setup-Guide` con el enlace real a tu repositorio de ayuda).
+    * Este proyecto espera una configuración de PostgreSQL. Puedes encontrar las instrucciones detalladas para la configuración de la base de datos en este repositorio de mi perfil:https://github.com/Na1kox-AFK/guia-postgre-api
     * Asegúrate de que los puertos de la base de datos coincidan con los configurados en el archivo `application.properties` del proyecto.
 4.  **Ejecuta el proyecto:**
-    * La aplicación principal se ejecuta desde `EcoMarketApplication.java`. Puedes ejecutarla directamente desde tu IDE (como IntelliJ IDEA o Eclipse) o usando Maven:
+    * La aplicación principal se ejecuta desde `EcoMarketApplication.java`. Puedes ejecutarla directamente desde tu IDE (como IntelliJ IDEA, Eclipse o VScode) o usando Maven:
         ```bash
         mvn spring-boot:run
         ```
