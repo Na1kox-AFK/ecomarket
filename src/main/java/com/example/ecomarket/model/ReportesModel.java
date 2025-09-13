@@ -28,6 +28,6 @@ public class ReportesModel {
     private String rutUsuario;
     private String correoElectronico;
     private String descripcionProblema;
-    private String estadoReporte; // Puede ser "Pendiente", "En Proceso", "Resuelto"
+    private String estadoReporte; 
 
 }
