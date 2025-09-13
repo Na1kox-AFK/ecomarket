@@ -56,23 +56,23 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // Método para extraer el nombre de usuario (subject) del token
+    /*Método para extraer el nombre de usuario (subject) del token*/
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // Método para extraer la fecha de expiración del token
+    /*Método para extraer la fecha de expiración del token*/
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    // Método genérico para extraer un claim específico del token
+    /*Método genérico para extraer un claim específico del token*/
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    // Método para extraer todos los claims del token
+    /*Método para extraer todos los claims del token*/
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
@@ -81,12 +81,12 @@ public class JwtTokenProvider {
                 .getBody();
     }
 
-    // Método para verificar si el token ha expirado
+    /* Método para verificar si el token ha expirado*/
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    // Método para validar el token
+    /*Metodo para validar el token*/
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
